@@ -10,7 +10,7 @@ final class OverlayWindowManager: NSObject, ObservableObject {
     private let panel: NSPanel
     private let hostingView: NSHostingView<AnyView>
     private var cancellables: Set<AnyCancellable> = []
-    private let padding = NSEdgeInsets(top: 40, left: 24, bottom: 0, right: 24)
+    private let padding = NSEdgeInsets(top: 20, left: 20, bottom: 0, right: 24)
 
     init(store: ObjectivesStore) {
         self.store = store

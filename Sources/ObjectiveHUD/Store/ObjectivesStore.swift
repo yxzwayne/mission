@@ -74,6 +74,49 @@ final class ObjectivesStore: ObservableObject {
         persistChanges(forceRefresh: true)
     }
 
+    /// Move a single objective to a different section (or within the same section) at a given destination index.
+    /// - Parameters:
+    ///   - objective: The objective to move.
+    ///   - targetSection: The destination section.
+    ///   - destinationIndex: Optional index at which to insert the objective in the destination section. Defaults to end.
+    func moveObjective(_ objective: Objective, to targetSection: ObjectiveSection, to destinationIndex: Int?) {
+        let insertIndex = destinationIndex ?? targetSection.sortedObjectives.count
+
+        // If moving within the same section, delegate to the existing reordering logic.
+        if let currentSection = objective.section, currentSection === targetSection {
+            let sorted = targetSection.sortedObjectives
+            guard let fromIndex = sorted.firstIndex(where: { $0.id == objective.id }) else { return }
+            moveObjectives(in: targetSection, from: IndexSet(integer: fromIndex), to: insertIndex)
+            return
+        }
+
+        // Remove from the current section if needed and reindex that section.
+        if let currentSection = objective.section {
+            var sourceSorted = currentSection.sortedObjectives
+            sourceSorted.removeAll { $0.id == objective.id }
+            for (idx, obj) in sourceSorted.enumerated() {
+                obj.order = idx
+                obj.touch()
+            }
+            currentSection.objectives = sourceSorted
+        }
+
+        // Insert into the target section at the desired index and reindex.
+        var targetSorted = targetSection.sortedObjectives
+        // In case the objective is already present (defensive), remove before inserting.
+        targetSorted.removeAll { $0.id == objective.id }
+        let clampedIndex = min(max(insertIndex, 0), targetSorted.count)
+        targetSorted.insert(objective, at: clampedIndex)
+        for (idx, obj) in targetSorted.enumerated() {
+            obj.order = idx
+            obj.touch()
+        }
+        targetSection.objectives = targetSorted
+        objective.section = targetSection
+
+        persistChanges(forceRefresh: true)
+    }
+
     func toggleCompletion(_ objective: Objective) {
         objective.isCompleted.toggle()
         persistObjective(objective)

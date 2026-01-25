@@ -41,13 +41,13 @@ struct ObjectiveDetailView: View {
                 Section("Progress") {
                     HStack {
                         Text("Current")
-                        TextField("Current", text: binding(for: \.progressCurrent))
+                        TextField("", text: binding(for: \.progressCurrent))
                             .textFieldStyle(.roundedBorder)
                             .frame(width: 80)
                     }
                     HStack {
                         Text("Total")
-                        TextField("Total", text: binding(for: \.progressTotal))
+                        TextField("", text: binding(for: \.progressTotal))
                             .textFieldStyle(.roundedBorder)
                             .frame(width: 80)
                     }
@@ -78,11 +78,12 @@ struct ObjectiveDetailView: View {
                             selection: countdownDateBinding,
                             displayedComponents: [.hourAndMinute, .date]
                         )
-                        TextField("Label (e.g. Purified)", text: countdownLabelBinding)
+                        TextField("Label", text: countdownLabelBinding)
                             .textFieldStyle(.roundedBorder)
                     }
                 }
             }
+            .padding(24)
             .navigationTitle("Objective Details")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

@@ -66,6 +66,10 @@ struct ObjectiveRowView: View {
             .buttonStyle(.borderless)
         }
         .padding(.vertical, 4)
+        .contentShape(Rectangle())
+        .onTapGesture(count: 2) {
+            isTitleFocused = true
+        }
         .onAppear {
             titleDraft = objective.title
         }
@@ -83,3 +87,4 @@ struct ObjectiveRowView: View {
         store.updateTitle(objective, title: newTitle)
     }
 }
+

@@ -2,6 +2,8 @@
 
 Mission is a lightweight overlay UI that tracks your tasks and progress like how the mission objectives are displayed in an overlay in-game. This small app lets you CRUD a list of tasks on your Mac. The overlay is styled to match that in StarCraft2.
 
+![Demo](assets/demo.png)
+
 ## Quickstart (dev)
 
 Prereqs:
